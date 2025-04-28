@@ -1,0 +1,446 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Transformer之后的四项重要技术</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Transformer之后的四项重要技术</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="transformer之后的四项重要技术"><a class="header" href="#transformer之后的四项重要技术">Transformer之后的四项重要技术</a></h1>
+<h2 id="引言"><a class="header" href="#引言">引言</a></h2>
+<p>自从 2017 年 Transformer 架构横空出世以来，它已成为诸多顶尖人工智能模型的核心。例如，ChatGPT、GPT-4 等大型语言模型都基于 Transformer 展现出了惊人的能力。</p>
+<p>然而，随着模型和应用规模的不断扩大，原始 Transformer 架构也暴露出一些限制和挑战：</p>
+<ul>
+<li><strong>计算和内存开销</strong>会随着序列长度二次增长，使长序列处理受限</li>
+<li><strong>模型参数规模</strong>急剧增大，训练和推理成本飙升</li>
+<li><strong>固定的位置编码</strong>难以泛化到超长文本</li>
+<li><strong>多头注意力的高内存占用</strong>导致大型模型推理变慢</li>
+</ul>
+<p>为了解决这些问题，近年来研究者提出了多项关键技术改进。本文将全面分析其中四项备受关注的技术：</p>
+<ul>
+<li><strong>FlashAttention</strong>（高效注意力计算）</li>
+<li><strong>Mixture of Experts (MoE)</strong>（专家混合模型）</li>
+<li><strong>RingAttention + Rotary Position Embedding (RoPE)</strong>（环形注意力 + 旋转位置编码）</li>
+<li><strong>Grouped Query Attention (GQA)</strong>（分组查询注意力）</li>
+</ul>
+<p>我们将分别介绍每项技术诞生的背景、工作机理和应用场景，并探讨它们为未来模型设计带来的启示。</p>
+<h2 id="作者"><a class="header" href="#作者">作者</a></h2>
+<p>Droggeljug: <a href="https://github.com/droggeljugLM">Github</a></p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="flashattention高速内存高效的注意力计算"><a class="header" href="#flashattention高速内存高效的注意力计算">FlashAttention：高速内存高效的注意力计算</a></h1>
+<blockquote>
+<p>“速度即是洞察，在注意力的每一次交互中，都要快人一步。”</p>
+<p>— <strong>FlashAttention</strong>（高效注意力计算）</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="诞生背景"><a class="header" href="#诞生背景">诞生背景</a></h1>
+<p>Transformer 的自注意力机制赋予了模型强大的建模长程依赖的能力，但代价是<strong>计算和内存消耗巨大</strong>。</p>
+<p>标准的注意力计算对长度为 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 的序列需要处理 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 的注意力矩阵，不仅计算复杂度是<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，更严重的是需要存储这个规模的矩阵以及中间结果。</p>
+<p>这种内存占用限制了可处理的序列长度，并降低了硬件效率——GPU往往花费大量时间在内存读写上，而不是实际的算术运算上。</p>
+<p>为此，研究人员开始思考：<strong>能否不改变注意力机制本身，却大幅提升计算速度、降低内存用量？</strong></p>
+<p>FlashAttention 正是在这个背景下诞生的。它由研究者针对GPU架构的特点提出，通过优化算法来充分利用高速缓存和减少不必要的内存访问，实现了在<strong>不近似注意力结果的前提下</strong>显著加速计算、节省内存。</p>
+<p>名字中的“Flash”寓意闪电般快速，也隐含着对 GPU <strong>高速显存</strong>（flash memory）高效利用之意。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="工作机理"><a class="header" href="#工作机理">工作机理</a></h1>
+<p>FlashAttention 的核心思路是<strong>重新组织注意力计算的顺序</strong>，以避免存储完整的注意力矩阵和多余的中间变量。</p>
+<p>传统注意力计算会经历如下步骤：先算出所有 Query-Key 点积得到权重矩阵，再整体做 softmax 归一化，然后乘以 Value 得到输出。这个过程中会产生巨大的中间矩阵。</p>
+<p>而 FlashAttention 选择按<strong>块</strong>（block）或按<strong>行</strong>逐步计算，使计算一边进行一边释放中间结果，从而<strong>无需一次性保留整个注意力矩阵</strong>。</p>
+<p>具体而言，FlashAttention 对序列切分成适当大小的块，在 GPU 上利用共享内存（SRAM）来存放当前块的计算，从而减少对全局显存（HBM）的读写。</p>
+<p>它采用一种“<strong>在线 Softmax</strong>”的方法：例如可以逐行处理注意力权重，每处理完一行（或一个子块）的点积，就立刻对该行做部分 softmax 归一化，然后乘上对应的 Value 累加到输出中。</p>
+<p>这样，当下一行开始计算时，上一行的权重不再需要保留。通过这种流水线式的计算，FlashAttention 避免了生成完整的 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 临时矩阵，而是始终在小块范围内计算并及时归约结果。</p>
+<div align="center">
+<p><img src="flashattention/../mdbook-plantuml-img/66c1b4f37d23675fec83b4bd662cc6585ea886cc.svg" alt="" /></p>
+</div>
+<p>这种方法充分利用了 GPU 的高速缓存和并行计算能力，减少了对慢速显存的访问次数，被称为“<strong>IO感知</strong>”的优化策略。</p>
+<p>简而言之，FlashAttention <strong>用空间换时间</strong>：用一点额外的算力在块间重叠计算，来换取巨大的内存节省和更高的带宽利用率。</p>
+<p>其结果是，在复杂度仍为 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 的前提下，常数项大幅降低：实际测试中，相比原始实现，FlashAttention 的速度提高了数倍，显存占用降低了一个数量级。</p>
+<p>此外，这种加速是<strong>精确的</strong>——它不会改变 Attention 计算结果，与标准 Transformer 完全一致（不同于一些近似注意力方法）。这一点确保了模型精度不受影响，因此可以放心地用 FlashAttention 替换原有注意力模块。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="应用场景"><a class="header" href="#应用场景">应用场景</a></h1>
+<p>FlashAttention 的出现，对训练和推理都有立竿见影的帮助。</p>
+<p>在训练阶段，它允许<strong>更长序列</strong>或<strong>更大批量</strong>在同样的硬件上跑通，从而提升模型能力和训练效率。
+例如，以往受限于显存，可能只能输入 512 或 1024 长度的序列进行训练；采用FlashAttention后，输入长度扩展到 2K、4K 甚至更长成为可能，这对于长文理解、代码建模等任务意义重大。同时，因为计算更快，模型每秒能处理的 token 数增加，缩短了训练时间。</p>
+<p>在推理阶段，特别是大模型部署时，FlashAttention 也大幅降低了延迟和内存使用。
+这意味着像聊天问答、实时翻译这类应用可以获得更快的响应，并在相同 GPU 上容纳更长的对话上下文而不溢出内存。</p>
+<p>如今，FlashAttention 已经被整合进主流的深度学习框架和 Transformer 库，成为实现高效 Transformer 的“标配”组件之一。许多开源的大模型实现也默认开启了 FlashAttention 来获取性能红利。</p>
+<p>可以说，在不改变 Transformer 网络结构的情况下，FlashAttention 用巧妙的算法优化突破了硬件瓶颈，为大模型的可扩展性打下了坚实基础。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="专家混合模型mixture-of-experts-moe"><a class="header" href="#专家混合模型mixture-of-experts-moe">专家混合模型（Mixture of Experts, MoE）</a></h1>
+<blockquote>
+<p>“智慧在于调度，当每个输入找到最合适的专家，模型便掌握了深度。”</p>
+<p>— <strong>Mixture of Experts (MoE)</strong>（专家混合模型）</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="诞生背景-1"><a class="header" href="#诞生背景-1">诞生背景</a></h1>
+<p>深度学习领域有一个直观的共识：<strong>更大的模型往往表现更好</strong>。增加神经元和层数能赋予模型更强的表达能力，预训练在海量数据上也会得到更通用强大的表征。</p>
+<p>然而，“更大”也意味着指数级增长的计算量和参数量。Transformer 模型从几千万参数发展到上亿、上百亿甚至千亿参数后，<strong>训练成本和内存占用变得难以承受</strong>。</p>
+<p>是否有办法在保持模型 <strong>“容量”</strong>（参数总数）巨大的同时，又不让每次处理每个样本时都动用所有参数？<strong>专家混合模型 (MoE)</strong> 就是在这样的思路下重新兴起的。</p>
+<p>其实，Mixture of Experts 的概念早在上世纪90年代就有提出：通过多个“专家”子模型协同工作来解决问题。但直到最近，谷歌等研究团队将这一思想应用于超大规模 Transformer，MoE 才显示出对扩展模型规模的巨大潜力。</p>
+<p>其背景动因在于：为了训练万亿级参数模型（例如谷歌的 Switch Transformer 达到 1.6 万亿参数），传统的“稠密”模型（每个输入激活所有参数）不可避免地耗费海量算力，而 MoE 提出了一种 <strong>“稀疏激活”</strong> 的范式——每次只用到部分参数即可得到接近同等效果，从而极大降低计算开销。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="工作机理-1"><a class="header" href="#工作机理-1">工作机理</a></h1>
+<p>Mixture of Experts 模型的核心在于将模型的某些层扩展为包含多个子专家网络，每个专家可以理解为一个独立的功能模块（通常是一个前馈神经网络，如 Transformer 中的 FFN 层）。</p>
+<p>此外，引入一个<strong>门控网络（Gate）或称路由器（Router）</strong>，由它来根据输入内容<strong>动态选择</strong>合适的专家为该输入服务。</p>
+<p>具体来说，当一个 token（或一批 token）通过 MoE 层时，门控网络会根据这个 token 的特征计算一组得分，表示该 token 应当“咨询”各个专家的程度。然后通常选择得分最高的一个或少数几个专家，让这些专家各自对该token进行变换处理，最后再将专家输出按照得分加权合并。</p>
+<div align="center">
+<p><img src="moe/../mdbook-plantuml-img/8d4d77d89610310797d036793128a0fcdf2335c0.svg" alt="" /></p>
+</div>
+<p>这意味着，相比常规 Transformer 中每个 token 都通过同一个 FFN 子网络，MoE 结构下<strong>不同 token 可能走向不同的专家</strong>，每个 token 实际只激活了整个模型中很小一部分参数。由于专家的选择是基于内容的、可学习的，因此模型可以学出一种 <strong>“按需分配资源”</strong> 的机制：简单的模式可能只需要简单专家处理，而复杂或特殊的模式则调用更擅长相关领域的专家。</p>
+<p>通过这种稀疏路由，MoE 层在总参数量巨大（例如有上百个专家的参数之和）情况下，每个样本实际计算的参数却很有限。这带来的直接好处是<strong>计算量的大幅降低</strong>：比如一个拥有 100 个专家的 MoE 层，如果每个 token 只走 1 个专家，那该层的计算量约为原来的 1/100，但模型总体参数量却增大了许多，保留了极高的潜在容量。</p>
+<p>这种“用参数换算力”的策略使得预训练<strong>更大的模型</strong>成为可能，因为只要有足够的硬件容纳参数，我们就能训练一个稀疏激活的巨型模型，而其每一步计算成本和一个较小的密集模型相当。</p>
+<p>不过，实现MoE也伴随着新的难题：<strong>怎样保证每个专家都能被有效训练且各司其职</strong>？</p>
+<p>如果没有约束，门控可能贪婪地把所有输入都送到表现最好的少数专家，导致其它专家闲置，进而模型有效容量没有充分发挥。为此，现代 MoE 模型在训练时通常加入<strong>负载均衡的损失项</strong>，鼓励路由器平均地利用不同专家，避免某些专家过载或“失业”。</p>
+<p>另外还有一些技巧例如设定每个专家最大接收多少个 token，或对路由得分做噪声扰动等，来提升训练稳定性。</p>
+<p>谷歌的 Switch Transformer 就是 MoE 思想的成功范例：它采用每个 token 只选 1 个专家的极简路由策略，加上特殊的稳定技巧（如加入一个路由 z-loss 正则项），最终在极大地扩展参数规模的同时，训练依然顺利进行并取得了优于同等计算量密集模型的效果。</p>
+<p>可以说，MoE 模型通过引入<strong>动态稀疏性</strong>，巧妙地突破了“参数规模 vs 计算成本”的矛盾。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="应用场景-1"><a class="header" href="#应用场景-1">应用场景</a></h1>
+<p>Mixture of Experts 为构建超大规模模型打开了一扇大门，其应用场景主要集中在需要<strong>庞大知识容量</strong>又希望<strong>节约计算</strong>的地方。</p>
+<p>大型预训练语言模型是MoE最典型的用武之地：Google 曾在机器翻译中率先使用 MoE 构建超过千亿参数的翻译模型，显著提升多语言翻译质量；随后推出的 Switch Transformer 和 GShard 等模型将 MoE 推向通用的语言模型领域，实现了在相同性能下大幅减少训练时间或者在相同计算预算下提升模型效果。</p>
+<p>在实际应用中，一个 MoE 模型可以被视为由多位“专家顾问”组成的团队，每个专家掌握着不同知识或技能。当有新的输入（问题）时，模型能自动挑选最合适的专家来处理，就好比询问最对口的顾问，从而得到更精准的结果。这对于需要处理多样化任务或领域的模型特别有利。</p>
+<p>例如，一个多语言的MoE模型可以让不同语言的文本各自找到擅长该语言的专家，从而在单一模型中实现对多语言的高性能支持。又或者在多模态模型中，不同模态信息可以由不同专家来处理，再汇合结果。</p>
+<p>在工业界，MoE 模型也被寄予厚望来降低大型模型的部署成本。因为在推理时，每个请求只触发部分专家计算，如果部署架构巧妙安排，让不同请求利用不同专家，那么整体吞吐可以提高，硬件利用率更高。</p>
+<p>当然，MoE 模型也有其挑战：例如所有专家的参数总和仍需占据显存或内存，这对部署环境是考验；又如推理时虽然计算少了，但需要高效的路由实现和专家并行。所以一些场景下会权衡 MoE 的利弊。</p>
+<p>然而，随着深度学习框架对MoE的支持日渐成熟（如各大分布式训练库提供了 MoE 并行方案），我们看到了越来越多的研究尝试将 MoE 用于如对话模型、代码模型等领域。</p>
+<p>总的来说，专家混合模型提供了一种全新的<strong>扩展模型能力</strong>的范式：通过模块化、按需计算，让模型能够变得前所未有地庞大而智能，为未来的超大模型设计积累了宝贵经验。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="环形注意力与旋转位置编码通往超长序列之路"><a class="header" href="#环形注意力与旋转位置编码通往超长序列之路">环形注意力与旋转位置编码：通往超长序列之路</a></h1>
+<blockquote>
+<p>“以环致远，以旋致密，长序列的秘密藏在循环与旋转之中。”</p>
+<p>— <strong>RingAttention + Rotary Position Embedding (RoPE)</strong>（环形注意力 + 旋转位置编码）</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="诞生背景-2"><a class="header" href="#诞生背景-2">诞生背景</a></h1>
+<p>Transformer 的另一大局限在于<strong>上下文长度</strong>。</p>
+<p>原始 Transformer 通常只能处理几百到几千个 token 的序列，因为自注意力的开销会随长度急剧增长。而现实中有许多任务天然涉及超长的内容：如整本小说或论文的阅读理解、长时间序列的解析（视频、音频）、庞大代码库的分析等等。</p>
+<p>如何让 Transformer 突破原有的长度限制，一直是研究热点。一方面，硬件内存是瓶颈，我们需要新的注意力机制或计算策略来<strong>高效处理长序列</strong>；另一方面，即便硬件允许，更长的序列也带来<strong>位置编码</strong>的新挑战——原有的位置编码方案（无论是固定的正弦/余弦，还是可学习的位置向量）在序列长度远超训练范围时，效果可能不稳定，或者无法捕捉远距离的位置关系。</p>
+<p>因此，围绕长序列的 Transformer 改进主要在两个方向展开：其一是<strong>改进注意力计算的范式</strong>，降低长序列计算和存储成本；其二是<strong>改进位置表示方式</strong>，使模型能够更好地泛化到训练长度以外，并有效感知相对位置信息。</p>
+<p><strong>环形注意力 (Ring Attention)</strong> 和 <strong>旋转位置编码 (RoPE)</strong> 分别对应了这两个方向的创新。它们的共同目标是让 Transformer 在上下文长度上实现飞跃，从几千扩展到几万、几十万，甚至百万级别。</p>
+<p>值得一提的是，近年来已经出现了一些支持超长上下文的模型原型：如 OpenAI 的 GPT-4 提供了长达 32K token 的上下文窗口，Anthropic 的 Claude 模型更是号称支持 100K token 的输入。</p>
+<p>这些突破背后，正是新型注意力机制和位置编码方法在发挥作用。环形注意力和RoPE便是其中极具代表性和通用性的技术。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="工作机理-2"><a class="header" href="#工作机理-2">工作机理</a></h1>
+<h2 id="旋转位置编码rope"><a class="header" href="#旋转位置编码rope">旋转位置编码（RoPE）</a></h2>
+<p>传统 Transformer 采用的位置编码要么是绝对的位置（例如通过预设的正弦–余弦函数进行位置编码，或使用可学习的位置嵌入向量），要么是相对的位置偏置（在计算注意力分数时根据相对距离加一个偏置项）。RoPE 的出发点则与众不同：它通过<strong>直接对 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span>、<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 向量施加一个与位置相关的旋转变换</strong>来编码位置信息。</p>
+<p>具体来说，RoPE 将每个位置的 Query 和 Key 向量的各个维度看作二维坐标（或复数），按照预设的频率对不同维度对进行旋转。第 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> 对维度的旋转角度通常设定为 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mord" style="margin-right:0.02778em;"><em></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span>（其中 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span> 是位置索引，<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mord" style="margin-right:0.02778em;"></em></span><span class="mord mathnormal">i</span></span></span></span> 随着维度递增的频率），这类似于正弦位置编码中不同频率的概念，但 RoPE 不是将值加在向量上，而是<strong>将向量在平面上旋转</strong>。</p>
+<div align="center">
+<p><img src="ringattention-rope/../mdbook-plantuml-img/25ce174da2b3ecde4ae9ac81a0f6003217548aa1.svg" alt="" /></p>
+</div>
+<p>经过这样处理后，不同位置的向量方向不同。神奇的是，当我们计算两个 token 间的点积（Attention 里的 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span>）时，旋转编码的效果体现为<strong>点积中自动出现与两者相对位移有关的项</strong>。</p>
+<p>通俗打个比方，如果没有 RoPE，两位置 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> 和 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span> 的 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 只反映 token 内容相关性；加入RoPE后，<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> 的值将受到 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> 和 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span> 差值的影响：位置越远，其对应角度差越大，点积会包含一个衰减或震荡项，某种程度上<strong>模拟了相对位置偏置</strong>。</p>
+<p>因此，RoPE 虽然形式上是绝对编码（每个 token 的表示只跟它自己的位置有关），但通过Attention 机制实现了<strong>隐式的相对位置效果</strong>。</p>
+<p>RoPE 有几个显著优点：</p>
+<ul>
+<li>
+<p>它<strong>不引入额外参数</strong>（完全基于设定的旋转频率公式），实现简单</p>
+</li>
+<li>
+<p>由于是连续的数学变换，它可以自然地<strong>拓展到任意长度</strong>——只要你能计算更大的位置索引对应的旋转角度，就能给出对应的位置编码，而不像绝对位置embedding那样固定维度或需要插值</p>
+</li>
+<li>
+<p>RoPE 对远距离的位置关系表达更加稳定，模型在训练中可以学会利用这种相对位移信息，因此当部署时遇到比训练时更长的文本，模型也倾向于较好地泛化处理，不会因为从未见过那么大的绝对索引而彻底失灵</p>
+</li>
+</ul>
+<p>很多开源的大型模型都采纳了RoPE方案，例如LLaMA系列模型、ChatGLM、Baichuan等都明确提到使用旋转位置嵌入来提升长文本处理能力。</p>
+<p>可以认为，RoPE为长序列Transformer提供了一种<strong>高效而优雅的位置表示</strong>，在不损失模型性能的情况下铺平了扩展上下文的道路。</p>
+<h2 id="环形注意力ring-attention"><a class="header" href="#环形注意力ring-attention">环形注意力（Ring Attention）</a></h2>
+<p>即使有了像 RoPE 这样的新位置编码，要真正处理十万乃至百万长度的序列，<strong>计算上的障碍</strong>依旧巨大。</p>
+<p>环形注意力是一种针对超长序列的分布式计算架构创新。其核心思想是：<strong>将超长序列的注意力计算拆分到多个设备上分而治之，同时通过环状通信保证全局的信息融合</strong>。</p>
+<p>具体而言，对于一个特别长的序列，我们可以将其按位置切分为若干块（block），例如每块包含一定数量的连续 token，并将这些块分配到不同的 GPU（或TPU）上处理。每个设备负责自己那一块作为查询（Q）的所有计算，但<strong>并不是只能看自己的块</strong>——通过设备间通信，它也能获取其他块的关键信息。</p>
+<p>环形注意力的名字来自这样一种通信模式：将所有设备按环形相连，每个设备将自己这块的 Key、Value 信息依次传递给环中的下一个设备，同时从上一个设备接收新的 Key、Value。这样过了一圈之后，每个设备实际上都<strong>陆续看到了来自所有块的 Key/Value</strong>，因此它可以对全序列计算完整的注意力，只不过这个过程是分步完成的。</p>
+<p>打个比方，想象五个人围成一圈，每个人各自读一本书的一章，然后依次把自己这章的摘要传给下一位，循环几轮之后，每个人都看过了全书所有章节的摘要——最终每个人都对整本书有了全面了解，尽管没有人一次性拿着整本书去读。环形注意力正是类似地，让每个计算节点逐块处理全序列的信息，从而避免了集中处理时内存爆炸。</p>
+<div align="center">
+<p><img src="ringattention-rope/../mdbook-plantuml-img/9d4d389ee86518462346bbe2f39679e61e802525.svg" alt="" /></p>
+</div>
+<p>在环形注意力的实现中，有两个关键点。</p>
+<p>一是将<strong>块内计算和块间通信重叠</strong>进行，以减少等待时间。因为每个设备在处理自己块的注意力计算时，可以同时把该块的 Key/Value 发往下一个设备，让通信和计算并行，不浪费时间。</p>
+<p>二是每个设备的<strong>内存占用</strong>主要由块大小决定，而与全序列长度无关。这意味如果每块选取长度为 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span>，哪怕总序列长度是 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">100</span><span class="mord mathnormal">L</span></span></span></span> 分散到 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">100</span></span></span></span> 个设备，每个设备也只需承担 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span> 规模注意力的内存，这就把单机内存需求从 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 降到了 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。通过增加设备数（扩展环的规模），理论上总序列长度 N 可以非常大而不致于单机内存耗尽。</p>
+<p>实际研究表明，Ring Attention 可以使支持的最大上下文长度相对于基线 Transformer 扩大好几倍。在 2023 年的一项实验中，研究者成功利用环形注意力让Transformer 处理超过 <strong>100M</strong>（亿级）tokens 长度的序列——这个数字远远超过了现有模型上下文窗口的纪录。</p>
+<p>可以预见，环形注意力这种方法将上下文长度扩展到了近乎无限的领域，为那些需要整合海量信息的任务（如整库代码分析、长时段视频理解等）提供了可能。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="应用场景-2"><a class="header" href="#应用场景-2">应用场景</a></h1>
+<p><strong>RoPE</strong> 的应用已经相当广泛，只要涉及 Transformer 长文本处理，RoPE 往往是默认选择之一。</p>
+<p>在大模型训练中使用 RoPE，可以增强模型对长序列的适应性，使其即使训练时序列不太长，推理时也能处理更长输入。</p>
+<p>这对于聊天机器人需要记住长对话、多轮交互，或者摘要需要压缩长篇文章等都很有帮助。特别是一些开源模型通过 RoPE 扩展上下文窗口的实践，让用户可以在比如 LLaMA 模型上实现原版没有的长文本处理能力。</p>
+<p>RoPE 也常被认为在一定程度上提升了模型的收敛速度和稳定性，因为相对位置信息的明确融入使注意力更高效。</p>
+<p>总之，任何想让 Transformer 具有 <strong>更长“记忆”</strong> 的应用，都能从旋转位置编码中受益。</p>
+<p><strong>环形注意力</strong> 目前主要还停留在前沿研究和特殊用途的阶段，但它展示出的潜力令人瞩目。</p>
+<p>一些需要处理超长序列的任务开始尝试这一思路。例如，在对<strong>海量日志数据</strong>或 <strong>DNA 序列</strong>进行建模时，数据长度可能远超传统模型能力范围，环形注意力提供了解决方案，使模型能够一次性考虑非常长的依赖而不是分段处理。</p>
+<p>此外，在分布式训练大型 Transformer 时，Ring Attention 的思想也可以与并行计算相结合：比如将模型并行和序列并行融合，最大化利用多机资源。</p>
+<p>还有研究将环形注意力用于<strong>长篇文档问答</strong>或<strong>编程辅助</strong>，让模型一次看完整个项目代码，从而回答关于整个项目的问题，而不需要片段式地来回检索。这类应用要求模型具备跨越段落乃至章节级别的注意力能力，Ring Attention 恰好为此提供了可能。</p>
+<p>当然，目前环形注意力实现较为复杂，只有在<strong>高性能集群</strong>上才有用武之地，但随着技术成熟，我们有理由相信超长上下文 Transformer 将逐步走出实验室，服务于实际需求。</p>
+<p>届时，不论是 RoPE 还是 Ring Attention，都将是其中不可或缺的组成部分：前者解决“记得远方”的表示问题，后者解决“看得更远”的计算问题，两者相辅相成，让 Transformer 真正做到“眼观六路、耳听八方”般地处理超长序列。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="分组查询注意力grouped-query-attention-gqa"><a class="header" href="#分组查询注意力grouped-query-attention-gqa">分组查询注意力（Grouped Query Attention, GQA）</a></h1>
+<blockquote>
+<p>“分组而治，分心而专，查询的力量在于协同与高效。”</p>
+<p>— <strong>Grouped Query Attention (GQA)</strong>（分组查询注意力）</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="诞生背景-3"><a class="header" href="#诞生背景-3">诞生背景</a></h1>
+<p>Transformer 中的<strong>多头注意力机制</strong>（Multi-Head Attention, MHA）是其成功的关键因素之一。</p>
+<p>多头让模型可以从不同“角度”关注信息，但也带来了代价：每个注意力头都有自己的一套 Query/Key/Value 投影参数，<strong>推理时还要存储每个头的 Key 和 Value 状态</strong>。</p>
+<p>在小模型上这不算问题，但对于数十亿参数的大模型（尤其是解码器-only架构的大语言模型），多头注意力在推理阶段的<strong>内存占用和带宽开销</strong>变得非常显著。</p>
+<p>具体而言，在文本生成时，模型需要不断将新 token 的 Query 与先前上下文的 Key 做点积。如果一个模型有 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> 个注意力头，那么需要维护 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> 份“Key/Value 缓存”供后续步骤使用。这些缓存随上下文长度线性增长，占用了宝贵的高速内存，并使每步计算需要频繁访问大量数据。当 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> 很大（例如 32 头、64 头）且层数多时，累积的 Key/Value 存储和访问会极大拖慢生成速度。</p>
+<p>为了解决这个瓶颈，Google 的研究人员提出了<strong>多查询注意力（Multi-Query Attention, MQA）的想法：与其每个头各存一份 Key/Value，不如让所有注意力头共享同一套 Key 和 Value</strong>。</p>
+<p>如此一来，无论有多少个头，Key/Value 缓存都只需保存一份，内存占用一下子降低了一个量级，查询速度也提升了（因为减少了内存读取）。多查询注意力据报道能将解码速度提高数倍，在一些早期实验中甚至达到 10 倍以上的提速。</p>
+<p>然而，MQA也有明显的不足：强行共享 Key/Value 使得不同头之间<strong>缺乏多样性</strong>，头数再多也变成“一个模式”在看待输入，可能会造成模型表达能力下降。在实践中，人们发现 MQA 相对于完整的多头注意力，会带来一定程度的性能下降，尤其是精细的生成质量上会有所折损。</p>
+<p>于是，业界开始探索<strong>折中方案</strong>，希望在效率和效果之间取得平衡，<strong>“分组查询注意力 (GQA)”</strong> 由此诞生。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="工作机理-3"><a class="header" href="#工作机理-3">工作机理</a></h1>
+<p>Grouped Query Attention 可以被看作是标准多头和多查询两种机制之间的一个<strong>插值与折中</strong>。</p>
+<p>它的基本思想是：将 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> 个注意力头划分成 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span> 个组，每组内部的头<strong>共享同一套 Key 和 Value</strong>，但不同组之间仍然保持独立的 Key/Value。</p>
+<p>换言之，如果把原来每个注意力头看成一个“查询视角”，MQA 是只有1个视角（所有头合一），而 GQA 则是介于两者之间，有 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span> 个视角。每个组内的头虽然还是多个，但因为它们看的是相同的 Key/Value，所以几乎等价于一个头（只是 Query 不同而已）。</p>
+<ul>
+<li>当 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> 时，组数等于头数，就是原始多头注意力；</li>
+<li>当 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span> 时，只有一组，就是多查询注意力；</li>
+<li>当 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> 时，我们得到一个<strong>分组共享</strong>的方案。</li>
+</ul>
+<p>比如，一个模型本来每层有 16 个注意力头，如果采用 GQA 将其分为4组共享，那么每组有 4 个头，它们共同使用该组的一套 Key/Value。这样每层只需要存 4 份 Key/Value 而不是16份，内存占用降低了75%，而头与头之间并非完全共享——同组的头共享但不同组的头还保留差异性。这样就部分保留了多头的多样性。</p>
+<div align="center">
+<p><img src="gqa/../mdbook-plantuml-img/cb64154133de866584764badd31c76d43c3964ab.svg" alt="" /></p>
+</div>
+<p>从实现上看，GQA 通常要求<strong>调整模型的参数矩阵</strong>：原来为每个注意力头各自学习的 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span>、<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 投影矩阵，现在变成每组学习一个。所以投影矩阵的数量从 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> 减少到 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span>，参数总量也略有下降（不过相比整个模型规模，这点减少可以忽略不计，主要收益还是在推理内存）。</p>
+<p>在生成过程中，使用 GQA 模型的每一层只需缓存 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span> 组 Key/Value。因为 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span> 远小于 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span>（常取值例如 4、8 等，而 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> 可能是 32、64），<strong>Key/Value缓存占用和访问带宽显著减少</strong>。</p>
+<p>与 MQA 相比，GQA 在<strong>保留模型性能</strong>上做得更好：由于还存在多个独立的 Key/Value 组，模型依然可以通过不同组的头来关注不同类型的信息，只是相比完全独立的多头有所约束。</p>
+<p>实际效果表明，选取一个适中的 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span> 值（例如使每组包含 2-4 个头）时，模型推理速度和内存表现大幅提升，而任务性能基本与原始多头相当，几乎感觉不到下降。尤其在大模型上，这种优化尤为明显——因为模型越大，多头越多，GQA 节省的资源就越可观。</p>
+<p>值得一提的是，研究者还开发出了从现有多头模型<strong>转换</strong>为 GQA 模型的方法：通过将若干头的权重进行平均或其他方式合并成共享的 Key/Value，以避免完全重新训练模型。这使得在工程上采用 GQA 更加灵活可行。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="应用场景-3"><a class="header" href="#应用场景-3">应用场景</a></h1>
+<p>Grouped Query Attention 虽然提出时间不长（大约在2023年中期开始流行），但已经迅速被诸多大型模型所采纳。</p>
+<p>最著名的例子莫过于 Meta 的 <strong>LLaMA-2</strong> 模型：据报道，LLaMA-2 在设计时就采用了 GQA 来降低推理内存，占用了更少的资源，因而在相同硬件上比起不用GQA的模型可以支持更大的上下文或更快的生成。</p>
+<p>同样地，新兴的开源模型 <strong>Mistral 7B</strong> 也使用了 GQA 技术，以小模型实现了惊人的性能，被社区广泛关注。</p>
+<p>此外，一些工业界的模型如 IBM 的 Granite 系列亦应用了 GQA 来提升推理效率。</p>
+<p>不难看出，在<strong>大语言模型的部署</strong>场景下，GQA 已成为提升效率的重要工具：无论是聊天机器人需要低延迟响应，还是部署在移动设备上要求节省内存，GQA 都提供了实用的优化手段。</p>
+<p>另一个应用场景是在<strong>流式生成和长文本生成</strong>中。</p>
+<p>因为 GQA 减少了 Key/Value 缓存的大小，对于需要处理长对话或长篇续写的模型，可以在给定显存下容纳更长的上下文持续生成，不容易中途内存不足。</p>
+<p>同时，由于访问的 Key/Value 条目减少，每步生成计算的延迟也降低，有利于实时应用。</p>
+<p>从开发者角度看，采用 GQA 的模型在进行模型并行（尤其是 Tensor 并行）时也较为友好：因为共享的 K、V 意味着在并行场景下需要同步的数据更少，通信开销降低。</p>
+<p>总体来说，<strong>凡是涉及大型 Transformer 模型推理</strong>的地方，Grouped Query Attention 都有潜力被用来<strong>加速和优化</strong>。</p>
+<p>它体现了一种通过<strong>架构改进来匹配硬件优势</strong>的思路：牺牲极小的模型表达能力换取成倍的效率提升，这样的权衡对工业应用是非常划算的。</p>
+<p>随着这一技术被反复验证，我们很可能看到今后的主流大模型，无论是开源还是商业，在多头注意力部分都会默认采用某种形式的 Grouped Query 方案。</p>
+<div style="break-before: page; page-break-before: always;"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="结语对未来模型设计的启示"><a class="header" href="#结语对未来模型设计的启示">结语：对未来模型设计的启示</a></h1>
+<p>透过以上对四项技术的分析，我们可以发现 Transformer 生态正在朝着<strong>更高效、更可扩展</strong>的方向演进。</p>
+<ul>
+<li>
+<p>FlashAttention 展示了<strong>算法和实现层面的优化</strong>如何突破硬件瓶颈，让标准的注意力机制焕发新生</p>
+</li>
+<li>
+<p>Mixture of Experts 则提供了<strong>架构层面的新思路</strong>，通过稀疏激活大幅提升模型容量，打破了参数规模与计算成本的线性绑定</p>
+</li>
+<li>
+<p>环形注意力和旋转位置编码专注于<strong>拓展序列长度</strong>这个维度，一个从计算并行性入手、一个从表示方式入手，共同指引 Transformer 迈向超长上下文的疆域</p>
+</li>
+<li>
+<p>Grouped Query Attention 立足于<strong>推理效率和内存优化</strong>，为实际部署大模型扫清障碍</p>
+</li>
+</ul>
+<p>每一项技术都针对 Transformer 的某个短板提出了创造性的解决方案，它们并非彼此孤立，而是可以协同作用，服务于一个共同的目标：<strong>在保持（或提升）模型能力的同时，最大程度降低资源消耗和提高扩展性。</strong></p>
+<p>这些创新带给未来模型设计的启示是深远的。</p>
+<p>首先，我们看到，想要构建更强大的模型，不再单纯依赖于“堆叠更多层、增加更多参数”这样的 brute force 式扩展。相反，<strong>聪明的设计</strong>和<strong>高效的算法</strong>变得同等重要——通过重新思考计算流程（如 FlashAttention）、模型结构（如 MoE、GQA）以及训练部署方式（如 Ring Attention），我们可以在不盲目增加算力需求的情况下获得性能跃升。这对于追求可持续发展的AI来说至关重要，因为硬件摩尔定律放缓，能效和速度的优化需要更多来自算法的贡献。</p>
+<p>其次，这些技术预示着未来的深度学习模型将更加<strong>模块化和定制化</strong>。例如，MoE 体现的是一种模块化思想：模型由许多专家模块组成，可以根据任务动态组装；又如 GQA 从某种程度上限制了注意力模块的自由度，却换来了整体系统更好的运行表现，说明在模型内部不同组件可能采用不同策略优化。</p>
+<p>未来的大模型设计或许会集大成：同时采用多种技术，将它们的优势结合。例如，一个未来的超大模型可能会这样构建：底层利用 FlashAttention 和环形并行来高效处理海量上下文，中间若干层是 MoE 结构以提升参数效率，位置编码采用 RoPE 确保长距离稳健，到了生成阶段用 GQA 压缩 Key/Value 以加速输出。这样的模型将比过去任何单一方式扩展的模型都更加强大而高效。</p>
+<p>可以预见，<strong>组合式创新</strong>将成为趋势，各种改进技术将在同一模型中交相辉映。</p>
+<p>最后，这四项技术也提醒我们，在追求更高性能时应当全面考虑<strong>计算、内存、模型容量、推理速度</strong>等各方面因素。</p>
+<p>Transformer 的成功不意味着它完美无缺，通过这些改进，我们看到了<strong>突破瓶颈的不同路径</strong>：有的从硬件友好性出发，有的从数学原理出发，有的从工程实用性出发。这启示研究者和工程师在设计新模型时，需要有整体系统观念，善于发现并弥补现有模型的短板。</p>
+<p>今后的 AI 模型或许不再有一个单一的“奇点式”架构突破，而是多个方面同步优化的结果。Transformer 之后，新技术层出不穷，而本文讨论的四项只是其中的代表。展望未来，我们可以期待更多类似的创见涌现，例如进一步的稀疏化技术、更智能的路由策略、甚至全新的序列建模范式。</p>
+<p>但无论怎样演变，这些努力的共同指向都是：<strong>让模型更聪明地利用每一分计算资源，更从容地应对愈发复杂的任务。</strong></p>
+<p>Transformer 作为AI革命的基石，在它之后蓬勃发展的这些技术创新无疑将继续推动下一个阶段的模型进化。通过巧妙地融合同 FlashAttention、MoE、环形注意力 + RoPE、GQA 等理念，我们有望打造出性能卓越又高效实用的AI系统，迈向通用智能的更高台阶。</p>
+<p>模型设计的未来，值得我们怀抱信心、拭目以待！</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
